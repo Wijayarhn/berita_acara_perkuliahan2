@@ -7,19 +7,27 @@
     /* Biar teks di select terlihat jelas */
     select.form-control-user {
       color: #000 !important;
-      background-color: #fff;
-      /* opsional */
+      background-color: #fff !important;
+      /* pastikan background putih */
     }
 
     /* Warna teks default option (placeholder) */
     select.form-control-user option[disabled],
     select.form-control-user option[value=""] {
       color: #888 !important;
+      font-style: italic;
     }
 
     /* Pastikan option lain tetap hitam */
     select.form-control-user option {
       color: #000 !important;
+    }
+
+    /* Cadangan label tampilan role */
+    #roleSelected {
+      margin-top: 5px;
+      font-size: 0.9rem;
+      color: #555;
     }
   </style>
 @endpush
@@ -57,6 +65,8 @@
           <option value="mahasiswa" {{ old('role') == 'mahasiswa' ? 'selected' : '' }}>Mahasiswa</option>
         </select>
 
+        {{-- Fallback indikator pilihan --}}
+        <small id="roleSelected"></small>
       </div>
 
       {{-- Nama --}}
@@ -124,9 +134,30 @@
       }
     }
 
-    document.getElementById('roleSelect').addEventListener('change', toggleRoleFields);
+    function showSelectedRole() {
+      const role = document.getElementById('roleSelect').value;
+      const label = document.getElementById('roleSelected');
+
+      if (role === 'admin') {
+        label.innerText = "Anda memilih: Admin";
+      } else if (role === 'dosen') {
+        label.innerText = "Anda memilih: Dosen";
+      } else if (role === 'mahasiswa') {
+        label.innerText = "Anda memilih: Mahasiswa";
+      } else {
+        label.innerText = "";
+      }
+    }
+
+    document.getElementById('roleSelect').addEventListener('change', function() {
+      toggleRoleFields();
+      showSelectedRole();
+    });
 
     // jalankan saat halaman load supaya old('role') tetap tampil
-    window.addEventListener('DOMContentLoaded', toggleRoleFields);
+    window.addEventListener('DOMContentLoaded', function() {
+      toggleRoleFields();
+      showSelectedRole();
+    });
   </script>
 @endpush
