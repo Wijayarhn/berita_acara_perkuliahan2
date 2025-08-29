@@ -6,10 +6,12 @@
   <div class="container-fluid mt-4">
     <h3 class="mb-4">Tambah User</h3>
 
+    {{-- Notifikasi sukses --}}
     @if (session('success'))
       <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
+    {{-- Notifikasi error --}}
     @if ($errors->any())
       <div class="alert alert-danger">
         <ul class="mb-0">
@@ -25,7 +27,8 @@
 
       {{-- Role --}}
       <div class="form-group">
-        <select name="role" class="form-control form-control-user" required>
+        <label for="roleSelect">Role</label>
+        <select name="role" id="roleSelect" class="form-control form-control-user" required>
           <option value="">-- Pilih Role --</option>
           <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
           <option value="dosen" {{ old('role') == 'dosen' ? 'selected' : '' }}>Dosen</option>
@@ -46,19 +49,19 @@
       </div>
 
       {{-- NIDN (khusus dosen) --}}
-      <div class="form-group">
+      <div class="form-group role-dosen" style="display:none;">
         <input name="nidn" type="text" class="form-control form-control-user" placeholder="NIDN (khusus dosen)"
           value="{{ old('nidn') }}">
       </div>
 
       {{-- NIM (khusus mahasiswa) --}}
-      <div class="form-group">
+      <div class="form-group role-mahasiswa" style="display:none;">
         <input name="nim" type="text" class="form-control form-control-user" placeholder="NIM (khusus mahasiswa)"
           value="{{ old('nim') }}">
       </div>
 
       {{-- Kelas (khusus mahasiswa) --}}
-      <div class="form-group">
+      <div class="form-group role-mahasiswa" style="display:none;">
         <input name="kelas" type="text" class="form-control form-control-user" placeholder="Kelas (khusus mahasiswa)"
           value="{{ old('kelas') }}">
       </div>
@@ -82,3 +85,25 @@
     </form>
   </div>
 @endsection
+
+@push('scripts')
+  <script>
+    function toggleRoleFields() {
+      const role = document.getElementById('roleSelect').value;
+
+      // sembunyikan semua field dulu
+      document.querySelectorAll('.role-dosen, .role-mahasiswa').forEach(el => el.style.display = 'none');
+
+      if (role === 'dosen') {
+        document.querySelectorAll('.role-dosen').forEach(el => el.style.display = 'block');
+      } else if (role === 'mahasiswa') {
+        document.querySelectorAll('.role-mahasiswa').forEach(el => el.style.display = 'block');
+      }
+    }
+
+    document.getElementById('roleSelect').addEventListener('change', toggleRoleFields);
+
+    // jalankan saat halaman load supaya old('role') tetap tampil
+    window.addEventListener('DOMContentLoaded', toggleRoleFields);
+  </script>
+@endpush
