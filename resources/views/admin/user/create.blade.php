@@ -2,6 +2,28 @@
 
 @section('title', 'Tambah User')
 
+@push('styles')
+  <style>
+    /* Biar teks di select terlihat jelas */
+    select.form-control-user {
+      color: #000 !important;
+      background-color: #fff;
+      /* opsional */
+    }
+
+    /* Warna teks default option (placeholder) */
+    select.form-control-user option[disabled],
+    select.form-control-user option[value=""] {
+      color: #888 !important;
+    }
+
+    /* Pastikan option lain tetap hitam */
+    select.form-control-user option {
+      color: #000 !important;
+    }
+  </style>
+@endpush
+
 @section('contents')
   <div class="container-fluid mt-4">
     <h3 class="mb-4">Tambah User</h3>
@@ -29,11 +51,12 @@
       <div class="form-group">
         <label for="roleSelect">Role</label>
         <select name="role" id="roleSelect" class="form-control form-control-user" required>
-          <option value="">-- Pilih Role --</option>
+          <option value="" disabled {{ old('role') ? '' : 'selected' }}>-- Pilih Role --</option>
           <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
           <option value="dosen" {{ old('role') == 'dosen' ? 'selected' : '' }}>Dosen</option>
           <option value="mahasiswa" {{ old('role') == 'mahasiswa' ? 'selected' : '' }}>Mahasiswa</option>
         </select>
+
       </div>
 
       {{-- Nama --}}
