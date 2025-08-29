@@ -129,7 +129,7 @@ HTML;
     public function import(Request $request)
     {
         $request->validate([
-            'file' => 'required|mimes:xlsx,xls,csv|max:20480', // max 20 MB
+            'file' => 'required|mimes:xlsx,xls,csv|max:20480',
         ], [
             'file.required' => 'File Excel wajib diunggah.',
             'file.mimes'    => 'Format harus xlsx, xls, atau csv.',
@@ -137,6 +137,16 @@ HTML;
 
         try {
             Excel::import(new JadwalKuliahImport, $request->file('file'));
+
+            // ambil error duplikat dari session
+            $errors = session()->pull('import_errors', []);
+
+            if (!empty($errors)) {
+                return redirect()
+                    ->route('admin.jadwal.index')
+                    ->with('error', implode('<br>', $errors));
+            }
+
             return redirect()
                 ->route('admin.jadwal.index')
                 ->with('success', 'Import jadwal berhasil.');
