@@ -143,9 +143,10 @@ HTML;
 
             if (!empty($errors)) {
                 return redirect()
-                    ->route('admin.jadwal.index')
+                    ->route('admin.jadwal.import.form') // balik ke form upload
                     ->with('error', implode('<br>', $errors));
             }
+
 
             return redirect()
                 ->route('admin.jadwal.index')

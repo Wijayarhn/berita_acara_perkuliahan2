@@ -7,13 +7,14 @@
     <h1 class="my-4">Upload Jadwal Kuliah (Excel)</h1>
 
     {{-- Notifikasi sukses --}}
+    {{-- Notifikasi sukses --}}
     @if (session('success'))
       <div class="alert alert-success">
         {{ session('success') }}
       </div>
     @endif
 
-    {{-- Notifikasi error --}}
+    {{-- Notifikasi error validasi --}}
     @if ($errors->any())
       <div class="alert alert-danger">
         <ul class="mb-0">
@@ -21,6 +22,13 @@
             <li>{{ $error }}</li>
           @endforeach
         </ul>
+      </div>
+    @endif
+
+    {{-- Notifikasi error duplikat --}}
+    @if (session('error'))
+      <div class="alert alert-danger">
+        {!! session('error') !!}
       </div>
     @endif
 
